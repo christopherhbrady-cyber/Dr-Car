@@ -100,10 +100,10 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
 <section id="home" class="hero">
   <div class="wrap hero-inner">
     <div class="hero-copy">
-      <span class="eyebrow">Classic-car focused · safety first</span>
+      <span class="eyebrow">Classic Car Diagnostic & Expertise Navigator</span>
       <h1>Dr <span>Car</span></h1>
       <h2>Diagnose. Learn. Connect. Drive On.</h2>
-      <p>Describe your classic car and its symptoms. Dr Car helps organize the problem, identify plausible causes, guide safe next steps, estimate repair effort, and decide whether it is a realistic DIY job or time to see a specialist.</p>
+      <p>Describe your vehicle and its symptoms. Dr Car helps organize the problem, identify plausible causes, guide safe next steps, estimate repair effort, and decide whether it is a realistic DIY job or time to see a specialist. Classic cars remain a signature strength, with modern gas/diesel, hybrid, and EV support built in.</p>
       <div class="hero-actions">
         <a class="btn btn-red" href="#diagnose">🩺 Diagnose My Car</a>
         <a class="btn btn-white" href="#specialist">📍 Find a Specialist</a>
@@ -115,10 +115,10 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
 <main class="wrap">
   <section class="section">
     <div class="quick-grid">
-      <article class="quick-card"><div class="quick-icon">🩺</div><h3>Start a Diagnosis</h3><p>Step-by-step intake built around older vehicles, their configurations, storage history, and symptoms.</p><a class="btn btn-red" href="#diagnose">Diagnose My Car →</a></article>
+      <article class="quick-card"><div class="quick-icon">🩺</div><h3>Start a Diagnosis</h3><p>Step-by-step intake for classic, modern gas/diesel, hybrid, and electric vehicles, with questions tailored to the vehicle type.</p><a class="btn btn-red" href="#diagnose">Diagnose My Car →</a></article>
       <article class="quick-card"><div class="quick-icon">🛠️</div><h3>DIY or Professional?</h3><p>Recommendations adapt to the owner’s skill level, tools, safety conditions, and repair difficulty.</p><a class="btn btn-blue" href="#diagnose">Get Guidance →</a></article>
-      <article class="quick-card"><div class="quick-icon">📍</div><h3>Find a Specialist</h3><p>Use your city or ZIP to search current map results for classic-car and marque-specific repair facilities.</p><a class="btn btn-green" href="#specialist">Find a Shop →</a></article>
-      <article class="quick-card"><div class="quick-icon">📚</div><h3>Learn & Explore</h3><p>Use service manuals, owner clubs, marque forums, and specialist knowledge rather than invented specifications.</p><a class="btn btn-gold" href="#resources">Resources →</a></article>
+      <article class="quick-card"><div class="quick-icon">📍</div><h3>Find a Specialist</h3><p>Use your city or ZIP to search current map results for the repair specialty your vehicle actually needs.</p><a class="btn btn-green" href="#specialist">Find a Shop →</a></article>
+      <article class="quick-card"><div class="quick-icon">📚</div><h3>Learn & Explore</h3><p>Use verified service information, owner communities, manufacturer resources, and specialist knowledge rather than invented specifications.</p><a class="btn btn-gold" href="#resources">Resources →</a></article>
     </div>
   </section>
 
@@ -135,10 +135,14 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
   </section>
 
   <section id="diagnose" class="section">
-    <div class="section-title"><div><h2>Diagnose My Car</h2><p>Think of this as a structured “patient intake” for a classic automobile.</p></div></div>
+    <div class="section-title"><div><h2>Diagnose My Car</h2><p>Think of this as a structured “patient intake” for your vehicle—classic, modern, hybrid, or electric.</p></div></div>
 
     <section class="panel">
       <div class="step-head"><div class="step-num">1</div><h3>Vehicle & owner context</h3></div>
+      <div class="grid2" style="margin-bottom:12px">
+        <div><label for="vehicleType">Vehicle type</label><select id="vehicleType"><option>Classic / Collector Vehicle</option><option>Modern Gas / Diesel Vehicle</option><option>Hybrid Vehicle</option><option>Electric Vehicle (EV)</option></select></div>
+        <div><label for="mileage">Mileage / odometer</label><input id="mileage" placeholder="Example: 82,000 miles"></div>
+      </div>
       <div class="grid4">
         <div><label for="year">Year</label><input id="year" placeholder="1979"></div>
         <div><label for="make">Make</label><input id="make" placeholder="Pontiac"></div>
@@ -149,6 +153,11 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
         <div><label for="engine">Engine / drivetrain</label><input id="engine" placeholder="Oldsmobile 403 V8"></div>
         <div><label for="fuel">Fuel system</label><select id="fuel"><option>Unknown</option><option>Carburetor</option><option>Mechanical fuel injection</option><option>Electronic fuel injection</option></select></div>
         <div><label for="ignition">Ignition system</label><select id="ignition"><option>Unknown</option><option>Points</option><option>Electronic / HEI</option><option>Aftermarket electronic</option></select></div>
+      </div>
+      <div class="grid3" style="margin-top:12px">
+        <div><label for="powertrain">Powertrain / energy source</label><select id="powertrain"><option>Unknown</option><option>Gasoline</option><option>Diesel</option><option>Hybrid gasoline-electric</option><option>Plug-in hybrid</option><option>Battery electric</option></select></div>
+        <div><label for="transmission">Transmission / drive unit</label><select id="transmission"><option>Unknown</option><option>Automatic</option><option>Manual</option><option>CVT</option><option>Single-speed EV drive</option></select></div>
+        <div><label for="codes">OBD-II / warning codes</label><input id="codes" placeholder="Example: P0304, ABS, battery warning"></div>
       </div>
       <div class="grid3" style="margin-top:12px">
         <div><label for="storage">How long has it been sitting?</label><select id="storage"><option>Driven regularly</option><option>Several weeks</option><option>1–6 months</option><option>6–12 months</option><option>More than a year</option></select></div>
@@ -200,6 +209,7 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
         <label class="chk"><input class="redflag" type="checkbox" value="severe overheating or coolant loss">Severe overheating / coolant loss</label>
         <label class="chk"><input class="redflag" type="checkbox" value="electrical smoke, sparks, or burning smell">Electrical smoke / sparks / burning smell</label>
         <label class="chk"><input class="redflag" type="checkbox" value="very low or no oil pressure">Very low / no oil pressure</label>
+        <label class="chk"><input class="redflag" type="checkbox" value="hybrid or EV high-voltage warning, damaged battery, smoke, heat, or crash impact near battery">Hybrid/EV high-voltage warning, damaged battery, smoke, heat, or battery-area impact</label>
       </div>
       <div class="actions">
         <button class="btn btn-red" id="analyze">Analyze Symptoms</button>
@@ -212,7 +222,7 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
       <div class="step-head"><div class="step-num">!</div><h3>Safety hard stop</h3></div>
       <div class="alert alert-safety" id="hardStopText"></div>
       <div class="actions">
-        <button class="btn btn-green shopSearch">📍 Find nearby classic-car repair/towing options</button>
+        <button class="btn btn-green shopSearch">📍 Find nearby repair / towing options</button>
         <button class="btn btn-soft" id="copyStop">Copy safety summary</button>
       </div>
     </section>
@@ -229,7 +239,7 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
 
       <div class="box" style="margin-top:14px">
         <h4>Repair planning estimates</h4>
-        <div class="alert alert-warn" style="margin-bottom:10px"><strong>Planning ranges only — not quotes.</strong> Classic-car costs and time vary widely by region, rust, originality, parts availability, shop rates, and previous modifications. Verify before authorizing work.</div>
+        <div class="alert alert-warn" style="margin-bottom:10px"><strong>Planning ranges only — not quotes.</strong> Repair costs and time vary by vehicle, region, corrosion, parts availability, diagnostic time, shop rates, software/calibration needs, originality, and previous modifications. Verify before authorizing work.</div>
         <div style="overflow:auto"><table class="estimate-table"><thead><tr><th>Possible repair / test</th><th>Difficulty</th><th>Typical time</th><th>DIY parts / supplies</th><th>Professional planning range</th></tr></thead><tbody id="estimates"></tbody></table></div>
       </div>
 
@@ -247,16 +257,16 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
   </section>
 
   <section id="specialist" class="section">
-    <div class="section-title"><div><h2>Find a Specialist</h2><p>Dr Car does not invent local businesses or fake ratings.</p></div></div>
+    <div class="section-title"><div><h2>Find a Specialist</h2><p>Dr Car does not invent local businesses or fake ratings. It helps you search for the specialty your vehicle actually needs.</p></div></div>
     <div class="panel">
       <div class="alert alert-info"><strong>Live local ratings:</strong> this prototype opens current map/search results so you can see live business names, ratings, reviews, hours, and distance. Any rating should be verified at the source before choosing a shop.</div>
       <div class="grid2" style="margin-top:13px">
-        <div><label for="manualSearch">Search specialty</label><input id="manualSearch" placeholder="Classic car carburetor specialist"></div>
+        <div><label for="manualSearch">Search specialty</label><input id="manualSearch" placeholder="Example: Ford diagnostic shop, hybrid specialist, classic carburetor specialist"></div>
         <div><label for="manualZip">City or ZIP</label><input id="manualZip" placeholder="San Antonio, TX"></div>
       </div>
       <div class="actions"><button class="btn btn-green" id="mapSearch">Open live map results</button><button class="btn btn-blue" id="clubSearch">Search owner clubs & marque forums</button></div>
-      <div class="shop-card"><div><b>What to look for in ratings</b><small>Read reviews that specifically mention vintage/classic vehicles, your make, carburetors, older ignition systems, restoration work, or similar repairs—not just the overall star number.</small></div><span class="tag">Verify live</span></div>
-      <div class="shop-card"><div><b>Questions to ask a shop</b><small>Have you worked on this make/engine? Who performs the diagnosis? Will you preserve original parts? Can you provide examples/references? How are estimates and additional work authorized?</small></div><span class="tag">Human check</span></div>
+      <div class="shop-card"><div><b>What to look for in ratings</b><small>Read reviews that specifically mention your vehicle type, make/model, suspected system, hybrid/EV qualifications when relevant, vintage/restoration work when relevant, or similar repairs—not just the overall star number.</small></div><span class="tag">Verify live</span></div>
+      <div class="shop-card"><div><b>Questions to ask a shop</b><small>Have you worked on this make/model/powertrain? Who performs the diagnosis? For hybrid/EV work, are technicians qualified for high-voltage systems? For classics, will you preserve original parts? How are estimates and additional work authorized?</small></div><span class="tag">Human check</span></div>
     </div>
   </section>
 
@@ -286,7 +296,7 @@ const $=id=>document.getElementById(id);
 const val=id=>$(id).value.trim();
 const selected=(sel)=>[...document.querySelectorAll(sel+':checked')].map(x=>x.value);
 const uniq=(arr,x)=>{if(!arr.includes(x))arr.push(x)};
-let current={specialist:'classic-car general mechanic', likely:[], checks:[], questions:[], estimates:[], risk:'medium'};
+let current={specialist:'general automotive diagnostic technician', likely:[], checks:[], questions:[], estimates:[], risk:'medium'};
 
 const EST={
  starter:[
@@ -333,7 +343,7 @@ const EST={
 };
 
 function saveProfile(){
-  const data={year:val('year'),make:val('make'),model:val('model'),zip:val('zip'),engine:val('engine'),fuel:val('fuel'),ignition:val('ignition'),storage:val('storage'),skill:val('skill'),originality:val('originality'),mods:val('mods'),tools:val('tools')};
+  const data={vehicleType:val('vehicleType'),mileage:val('mileage'),year:val('year'),make:val('make'),model:val('model'),zip:val('zip'),engine:val('engine'),fuel:val('fuel'),ignition:val('ignition'),powertrain:val('powertrain'),transmission:val('transmission'),codes:val('codes'),storage:val('storage'),skill:val('skill'),originality:val('originality'),mods:val('mods'),tools:val('tools')};
   localStorage.setItem('drCarVehicle',JSON.stringify(data));
   alert('Vehicle profile saved on this device.');
 }
@@ -345,7 +355,7 @@ function getData(){
  return {
    vehicle:[val('year'),val('make'),val('model')].filter(Boolean).join(' ')+(val('engine')?' — '+val('engine'):''),
    year:val('year'),make:val('make'),model:val('model'),zip:val('zip'),
-   engine:val('engine'),fuel:val('fuel'),ignition:val('ignition'),storage:val('storage'),
+   vehicleType:val('vehicleType'),mileage:val('mileage'),engine:val('engine'),fuel:val('fuel'),ignition:val('ignition'),powertrain:val('powertrain'),transmission:val('transmission'),codes:val('codes'),storage:val('storage'),
    skill:val('skill'),originality:val('originality'),mods:val('mods'),tools:val('tools'),
    symptoms:val('symptoms'),when:selected('#whenChecks input'),sensory:val('sensory'),gauges:val('gauges'),recent:val('recent'),
    preference:val('preference'),redflags:selected('.redflag')
@@ -360,6 +370,7 @@ function hardStop(data){
  if(data.redflags.some(x=>/overheating/i.test(x)))msgs.push('Shut the engine off and allow it to cool completely. Never remove a pressurized radiator cap while hot.');
  if(data.redflags.some(x=>/electrical/i.test(x)))msgs.push('Turn the vehicle off if it can be done safely. Avoid continued operation where smoke, sparks, or burning wiring is present.');
  if(data.redflags.some(x=>/oil pressure/i.test(x)))msgs.push('Shut the engine off. Running an engine with little or no oil pressure can cause severe damage.');
+ if(data.redflags.some(x=>/high-voltage|damaged battery|battery-area/i.test(x)))msgs.push('Do not touch orange high-voltage cables, battery enclosures, or damaged electrical components. Keep clear of a smoking, hissing, unusually hot, flooded, or crash-damaged hybrid/EV battery area and arrange qualified emergency/towing or high-voltage service as appropriate.');
  const summary=`DR CAR — SAFETY HARD STOP\n\nVehicle: ${data.vehicle||'Not provided'}\nSafety flags: ${data.redflags.join('; ')}\n\n${msgs.map((m,i)=>`${i+1}. ${m}`).join('\n')}\n\nArrange an appropriate tow/transport and professional inspection. Do not proceed with DIY troubleshooting until the safety-critical condition is resolved.`;
  $('hardStopText').innerHTML='<strong>Do not continue the DIY path.</strong><br><br>'+msgs.map(m=>'• '+m).join('<br>')+'<br><br><strong>Arrange a flatbed tow or other appropriate transport and professional inspection.</strong>';
  $('hardStop').classList.add('on'); $('results').classList.remove('on');
@@ -367,8 +378,8 @@ function hardStop(data){
 }
 function addEstimate(list,key){(EST[key]||EST.general).forEach(r=>{if(!list.some(x=>x[0]===r[0]))list.push(r)})}
 function analyzeData(data, follow=''){
- const txt=[data.symptoms,data.sensory,data.gauges,data.recent,data.when.join(' '),follow].join(' ').toLowerCase();
- const likely=[],checks=[],questions=[],estimates=[]; let risk='low', specialist='classic-car general mechanic';
+ const txt=[data.vehicleType,data.powertrain,data.codes,data.symptoms,data.sensory,data.gauges,data.recent,data.when.join(' '),follow].join(' ').toLowerCase();
+ const likely=[],checks=[],questions=[],estimates=[]; let risk='low', specialist=(data.vehicleType==='Classic / Collector Vehicle'?'classic-car general mechanic':data.vehicleType==='Hybrid Vehicle'?'hybrid diagnostic technician':data.vehicleType==='Electric Vehicle (EV)'?'EV-qualified diagnostic technician':'general automotive diagnostic technician');
 
  if(/hot restart|hot start|when hot|after driving|crank.*hot/.test(txt)){
    risk='medium'; uniq(likely,'Starting-circuit heat soak, starter/solenoid condition, cable resistance, or poor engine/body grounds.');
@@ -384,50 +395,76 @@ function analyzeData(data, follow=''){
    risk=risk==='low'?'medium':risk; uniq(likely,'Fuel-delivery or carburetor condition such as flooding, float/needle trouble, hose/fitting condition, or heat-related fuel boiling.');
    uniq(checks,'With the engine off and cool, visually inspect accessible fuel hoses/fittings for wetness, cracks, seepage, or strong localized fuel odor.');
    uniq(questions,'Is fuel visibly leaking, or is the symptom limited to odor?');
-   specialist='carburetor and vintage fuel-system specialist';addEstimate(estimates,'fuel');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'carburetor and vintage fuel-system specialist':'fuel-injection / engine-management diagnostic technician';addEstimate(estimates,'fuel');
  }
  if(/overheat|coolant|radiator|temperature.*high/.test(txt)){
    risk='high'; uniq(likely,'Cooling-system issue involving coolant flow, fan operation, thermostat, radiator efficiency, belt drive, water pump, or engine tune.');
    uniq(checks,'Only when the engine is fully cool, inspect coolant level, hoses, belt condition, and visible leakage. Never remove a hot radiator cap.');
    uniq(questions,'Does temperature rise mainly at idle, at highway speed, or under load?');
-   specialist='classic-car cooling-system / engine specialist';addEstimate(estimates,'cooling');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'classic-car cooling-system / engine specialist':'cooling-system / engine diagnostic technician';addEstimate(estimates,'cooling');
  }
  if(/brake|pedal|pulls left|pulls right|stopping/.test(txt)){
    risk=/floor|no brake|major loss/.test(txt)?'high':(risk==='low'?'medium':risk);
    uniq(likely,'Brake hydraulic, adjustment, hose, caliper/wheel-cylinder, drum/disc, or contamination issue.');
    uniq(checks,'Do not road-test a vehicle with significantly reduced braking. With the car secured, inspect for visible fluid leakage before moving it.');
    uniq(questions,'Is the pedal firm, soft/spongy, sinking, or pulsating?');
-   specialist='brake specialist experienced with vintage systems';addEstimate(estimates,'brakes');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'brake specialist experienced with vintage systems':'automotive brake / ABS specialist';addEstimate(estimates,'brakes');
  }
  if(/battery|dead battery|drain|charging|alternator|generator|voltage/.test(txt)){
    risk=risk==='low'?'medium':risk;uniq(likely,'Charging-system, battery-connection, ground, or parasitic electrical-load issue.');
    uniq(checks,'Inspect battery terminals and grounds. Use test equipment only if it matches your skill level and you can do so safely.');
    uniq(questions,'Does the battery go flat while driving, overnight, or only after sitting several days?');
-   specialist='vintage automotive electrical specialist';addEstimate(estimates,'electrical');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'vintage automotive electrical specialist':'automotive electrical diagnostic technician';addEstimate(estimates,'electrical');
  }
  if(/misfire|rough idle|hesitat|backfire|stumble/.test(txt)){
    risk=risk==='low'?'medium':risk;uniq(likely,'Ignition, carburetion/fuel delivery, vacuum leak, or engine mechanical issue.');
    uniq(checks,'With the engine off, visually inspect accessible vacuum hoses and ignition leads for obvious damage.');
    uniq(questions,'Is the symptom worse cold, hot, at idle, or under load?');
-   specialist='classic-car engine tuning / ignition specialist';addEstimate(estimates,'ignition');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'classic-car engine tuning / ignition specialist':'engine-management / ignition diagnostic technician';addEstimate(estimates,'ignition');
  }
  if(/transmission|slip|shift|gear|clutch/.test(txt)){
    risk=risk==='low'?'medium':risk;uniq(likely,'Transmission fluid/pressure, linkage, clutch/band, or internal transmission condition.');
    uniq(questions,'Does the problem appear in one gear, when hot, or only under acceleration?');
-   specialist='vintage transmission specialist';addEstimate(estimates,'transmission');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'vintage transmission specialist':'transmission / driveline specialist';addEstimate(estimates,'transmission');
  }
  if(/steer|wander|suspension|shimmy|clunk|wheel bearing/.test(txt)){
    risk=/loss|loose.*wheel/.test(txt)?'high':(risk==='low'?'medium':risk);
    uniq(likely,'Steering linkage, alignment, wheel/tire, bearing, or suspension wear.');
    uniq(checks,'Inspect tires for obvious damage or severe pressure mismatch. Do not crawl under the car unless it is correctly lifted and supported with rated equipment.');
    uniq(questions,'Does the symptom change with speed, braking, turning, or road surface?');
-   specialist='vintage steering, suspension, and alignment specialist';addEstimate(estimates,'steering');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'vintage steering, suspension, and alignment specialist':'steering / suspension / alignment specialist';addEstimate(estimates,'steering');
  }
  if(/knock|tick|rattle|oil pressure|metallic noise/.test(txt)){
    risk=/no oil|zero oil|very low oil/.test(txt)?'high':(risk==='low'?'medium':risk);
    uniq(likely,'Engine mechanical or lubrication-related condition requiring careful evaluation.');
    uniq(questions,'Does the noise change with RPM, engine temperature, or load?');
-   specialist='classic engine builder / diagnostic mechanic';addEstimate(estimates,'engine');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'classic engine builder / diagnostic mechanic':'engine mechanical diagnostic technician';addEstimate(estimates,'engine');
+ }
+ if(/p0[0-9]{3}|check engine|cel|engine light|obd|misfire|p030/.test(txt)){
+   risk=risk==='low'?'medium':risk;uniq(likely,'An onboard diagnostic fault or engine-management issue needs code-guided diagnosis rather than parts replacement by guesswork.');
+   uniq(checks,'Record the exact OBD-II code(s) and freeze-frame information if available. Do not clear codes before documenting them.');
+   uniq(questions,'What exact code(s) are present, and did the warning light flash or remain steady?');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'classic-car engine tuning / ignition specialist':'automotive diagnostic technician with scan-tool capability';addEstimate(estimates,'ignition');
+ }
+ if(/abs|traction|stability|airbag|srs|tpms/.test(txt)){
+   risk=risk==='low'?'medium':risk;uniq(likely,'A chassis or safety-control system fault may involve a sensor, wiring, module, wheel-speed signal, or related mechanical condition.');
+   uniq(checks,'Document which warning lamps are on and whether braking, steering, or handling feels abnormal. Avoid road testing if control or braking is compromised.');
+   uniq(questions,'Are ABS, traction-control, stability-control, steering, or airbag warnings appearing together?');
+   specialist='automotive chassis / ABS diagnostic technician';
+ }
+ if(/battery light|charging|alternator|12v|won.t start|no start|slow crank/.test(txt) && data.vehicleType!=='Electric Vehicle (EV)'){
+   uniq(likely,'A 12-volt battery, charging-system, connection, starter, or control-circuit issue may be involved.');
+   uniq(checks,'With the vehicle off, inspect accessible battery terminals and grounds for looseness or corrosion.');
+   uniq(questions,'How old is the 12-volt battery, and does the symptom change with a jump start?');
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'vintage automotive electrical specialist':'automotive electrical / starting-charging specialist';addEstimate(estimates,'electrical');
+ }
+ if(data.vehicleType==='Hybrid Vehicle' || data.vehicleType==='Electric Vehicle (EV)'){
+   uniq(questions,'Are there any high-voltage, isolation, battery, charging, turtle/reduced-power, or hybrid-system warning messages?');
+   uniq(checks,'Limit owner checks to non-invasive observations, charging-cable/connector condition, visible 12-volt battery condition, and documented warning messages. Do not open high-voltage enclosures or probe orange-cable circuits.');
+   if(/charge|charging|range|turtle|reduced power|hybrid system|high voltage|isolation|ev battery|traction battery/.test(txt)){
+     risk=risk==='low'?'medium':risk;uniq(likely,'A hybrid/EV energy-storage, charging, thermal-management, 12-volt support, or control-system issue may be involved.');
+     specialist=data.vehicleType==='Electric Vehicle (EV)'?'EV-qualified high-voltage diagnostic technician':'hybrid-qualified diagnostic technician';
+   }
  }
  if(/sat|sitting|stale|months|years/.test(txt) && data.storage!=='Driven regularly'){
    uniq(likely,'Storage-related effects such as stale fuel, varnish, dried seals, corrosion, discharged battery, or stuck components may be contributing.');
@@ -438,7 +475,7 @@ function analyzeData(data, follow=''){
  }
  if(/still.*slow|crank.*slow/.test(follow)){
    likely.unshift('Hot-cranking electrical/starter load remains a leading possibility because the reported check did not change the slow-crank symptom.');
-   specialist='vintage electrical / starter-system specialist';
+   specialist=data.vehicleType==='Classic / Collector Vehicle'?'vintage electrical / starter-system specialist':'starting / charging-system diagnostic technician';
  }
  if(!likely.length){
    likely.push('The symptom description is not specific enough yet for a useful first-pass ranking.');
@@ -450,7 +487,7 @@ function analyzeData(data, follow=''){
  }
  if(!checks.length)checks.push('Perform only safe visual checks with the engine off and the vehicle secured. Any hands-on work must match your skill level and proper support/safety equipment.');
  if(data.originality.includes('Matching'))uniq(checks,'Before replacing original components, preserve removed parts and verify that any repair will not unnecessarily reduce originality or matching-numbers value.');
- if(data.skill==='Beginner')uniq(checks,'Because you selected Beginner, keep DIY work to observation and simple accessible checks; escalate anything requiring lifting, fuel-system opening, electrical probing near live circuits, or major adjustment.');
+ if(data.skill==='Beginner')uniq(checks,'Because you selected Beginner, keep DIY work to observation and simple accessible checks; escalate anything requiring lifting, fuel-system opening, electrical probing near live circuits, hybrid/EV high-voltage access, software programming, or major adjustment.');
  return {risk,likely:likely.slice(0,6),checks:checks.slice(0,7),questions:questions.slice(0,6),specialist,estimates:estimates.slice(0,6)};
 }
 function showResults(data,res,follow=''){
@@ -460,17 +497,22 @@ function showResults(data,res,follow=''){
  $('likely').innerHTML=res.likely.map(x=>'<li>'+x+'</li>').join('');
  $('checks').innerHTML=res.checks.map(x=>'<li>'+x+'</li>').join('');
  $('questions').innerHTML=res.questions.map(x=>'<li>'+x+'</li>').join('');
- $('specialist').innerHTML='<strong>'+res.specialist+'</strong><p class="muted">Prefer someone who can demonstrate experience with the vehicle era, configuration, and the suspected system.</p>';
+ $('specialist').innerHTML='<strong>'+res.specialist+'</strong><p class="muted">Prefer someone who can demonstrate experience with this vehicle type, make/model or era, powertrain, and suspected system.</p>';
  $('estimates').innerHTML=res.estimates.map(r=>`<tr>${r.map((x,i)=>`<td>${i===1?'<span class="tag">'+x+'</span>':x}</td>`).join('')}</tr>`).join('');
  $('report').textContent=buildReport(data,res,follow);
  $('manualSearch').value=res.specialist;$('manualZip').value=data.zip;
  $('results').scrollIntoView({behavior:'smooth'});
 }
 function buildReport(d,r,follow){
-return `DR CAR — CLASSIC CAR INTAKE & TRIAGE REPORT
+return `DR CAR — VEHICLE INTAKE & TRIAGE REPORT
 
 Vehicle: ${d.vehicle||'Not provided'}
+Vehicle type: ${d.vehicleType||'Not provided'}
+Mileage: ${d.mileage||'Not provided'}
 Location: ${d.zip||'Not provided'}
+Powertrain / energy source: ${d.powertrain||'Not provided'}
+Transmission / drive unit: ${d.transmission||'Not provided'}
+OBD-II / warning codes: ${d.codes||'None provided'}
 Fuel system: ${d.fuel}
 Ignition: ${d.ignition}
 Storage history: ${d.storage}
@@ -523,17 +565,29 @@ function updateDiagnosis(){
  const r=analyzeData(d,f);showResults(d,r,f);$('loopNote').textContent='Diagnosis updated using the new check result. Continue the loop only with safe checks that fit your skill level.';
 }
 function searchMaps(){
- const loc=val('manualZip')||val('zip');const spec=val('manualSearch')||current.specialist||'classic car repair';
+ const loc=val('manualZip')||val('zip');const spec=val('manualSearch')||current.specialist||'automotive repair';
  window.open('https://www.google.com/maps/search/'+encodeURIComponent(spec+' '+loc),'_blank','noopener');
 }
 function searchClubs(){
- const make=val('make')||'classic car';const q=encodeURIComponent(make+' owner club forum classic car specialist '+(val('zip')||''));
+ const make=val('make')||'vehicle';const classic=val('vehicleType')==='Classic / Collector Vehicle';const q=encodeURIComponent(make+(classic?' owner club marque forum classic car specialist ':' owner forum specialist service ')+(val('zip')||''));
  window.open('https://www.google.com/search?q='+q,'_blank','noopener');
 }
 function loadSample(){
- $('year').value='1979';$('make').value='Pontiac';$('model').value='Trans Am';$('engine').value='Oldsmobile 403 V8';$('zip').value='San Antonio, TX';$('fuel').value='Carburetor';$('ignition').value='Electronic / HEI';$('storage').value='Driven regularly';$('skill').value='Comfortable with basic tools';$('originality').value='Mostly original';$('mods').value='Mostly stock';$('tools').value='Basic hand tools and multimeter';$('symptoms').value='Starts normally when cold, but after driving about 30 minutes it is difficult to restart when hot. Sometimes it cranks slower than when cold.';$('sensory').value='Occasional fuel smell after shutdown';$('gauges').value='Temperature appears normal';$('recent').value='No recent repairs';
+ $('vehicleType').value='Classic / Collector Vehicle';$('mileage').value='';$('powertrain').value='Gasoline';$('transmission').value='Automatic';$('codes').value='';$('year').value='1979';$('make').value='Pontiac';$('model').value='Trans Am';$('engine').value='Oldsmobile 403 V8';$('zip').value='San Antonio, TX';$('fuel').value='Carburetor';$('ignition').value='Electronic / HEI';$('storage').value='Driven regularly';$('skill').value='Comfortable with basic tools';$('originality').value='Mostly original';$('mods').value='Mostly stock';$('tools').value='Basic hand tools and multimeter';$('symptoms').value='Starts normally when cold, but after driving about 30 minutes it is difficult to restart when hot. Sometimes it cranks slower than when cold.';$('sensory').value='Occasional fuel smell after shutdown';$('gauges').value='Temperature appears normal';$('recent').value='No recent repairs';
  document.querySelectorAll('#whenChecks input').forEach(x=>x.checked=x.value==='hot restart');
 }
+function updateVehicleTypeUI(){
+ const t=val('vehicleType');
+ const classic=t==='Classic / Collector Vehicle';
+ const ev=t==='Electric Vehicle (EV)';
+ const hybrid=t==='Hybrid Vehicle';
+ document.querySelector('label[for="fuel"]').textContent=classic?'Fuel system':'Fuel delivery / injection system';
+ document.querySelector('label[for="ignition"]').textContent=classic?'Ignition system':'Ignition / engine-management type';
+ if(ev){$('fuel').value='Unknown';$('ignition').value='Unknown';$('powertrain').value='Battery electric';$('originality').value='Not sure / not important';}
+ if(hybrid && $('powertrain').value==='Unknown')$('powertrain').value='Hybrid gasoline-electric';
+ $('manualSearch').placeholder=classic?'Classic car carburetor specialist':'Example: make-specific diagnostic shop, hybrid specialist, EV service center';
+}
+$('vehicleType').onchange=updateVehicleTypeUI;updateVehicleTypeUI();
 $('saveVehicle').onclick=saveProfile;$('loadVehicle').onclick=loadProfile;$('analyze').onclick=doAnalyze;$('sample').onclick=loadSample;$('clear').onclick=()=>location.reload();$('updateDiagnosis').onclick=updateDiagnosis;
 $('mapSearch').onclick=searchMaps;$('clubSearch').onclick=searchClubs;document.querySelectorAll('.shopSearch').forEach(b=>b.onclick=searchMaps);
 $('copyReport').onclick=async()=>{await navigator.clipboard.writeText($('report').textContent);$('copyReport').textContent='Copied';setTimeout(()=>$('copyReport').textContent='Copy report',1200)};
