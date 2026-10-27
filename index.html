@@ -152,17 +152,17 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
       <div class="grid3" style="margin-top:12px">
         <div><label for="engine">Engine / drivetrain</label><input id="engine" placeholder="Oldsmobile 403 V8"></div>
         <div><label for="fuel">Fuel system</label><select id="fuel"><option>Unknown</option><option>Carburetor</option><option>Mechanical fuel injection</option><option>Electronic fuel injection</option></select></div>
-        <div><label for="ignition">Ignition system</label><select id="ignition"><option>Unknown</option><option>Points</option><option>Electronic / HEI</option><option>Aftermarket electronic</option></select></div>
+        <div><label for="ignition">Ignition system</label><small class="dcHelp">HEI is a type of electronic ignition. Choose Unknown if unsure.</small><select id="ignition"><option>Unknown</option><option>Points</option><option>Electronic / HEI</option><option>Aftermarket electronic</option></select></div>
       </div>
       <div class="grid3" style="margin-top:12px">
         <div><label for="powertrain">Powertrain / energy source</label><select id="powertrain"><option>Unknown</option><option>Gasoline</option><option>Diesel</option><option>Hybrid gasoline-electric</option><option>Plug-in hybrid</option><option>Battery electric</option></select></div>
-        <div><label for="transmission">Transmission / drive unit</label><select id="transmission"><option>Unknown</option><option>Automatic</option><option>Manual</option><option>CVT</option><option>Single-speed EV drive</option></select></div>
-        <div><label for="codes">OBD-II / warning codes</label><input id="codes" placeholder="Example: P0304, ABS, battery warning"></div>
+        <div><label for="transmission">Transmission / drive unit</label><small class="dcHelp">CVT means continuously variable transmission. Unknown is fine.</small><select id="transmission"><option>Unknown</option><option>Automatic</option><option>Manual</option><option>CVT</option><option>Single-speed EV drive</option></select></div>
+        <div><label for="codes">Dashboard warning lights / OBD-II codes (optional)</label><small class="dcHelp">OBD-II codes can be read with a scanner on most US 1996-and-newer cars. Skip this if you do not know.</small><input id="codes" placeholder="Example: P0304, ABS, battery warning"></div>
       </div>
       <div class="grid3" style="margin-top:12px">
-        <div><label for="storage">How long has it been sitting?</label><select id="storage"><option>Driven regularly</option><option>Several weeks</option><option>1–6 months</option><option>6–12 months</option><option>More than a year</option></select></div>
+        <div><label for="storage">How often is this vehicle driven?</label><select id="storage"><option>Driven regularly</option><option>Several weeks</option><option>1–6 months</option><option>6–12 months</option><option>More than a year</option></select></div>
         <div><label for="skill">Your skill level</label><select id="skill"><option>Beginner</option><option>Comfortable with basic tools</option><option>Intermediate DIY</option><option>Experienced mechanic/restorer</option></select></div>
-        <div><label for="originality">Originality priority</label><select id="originality"><option>Not sure / not important</option><option>Mostly original</option><option>Matching-numbers / preserve originality</option><option>Modified / restomod</option></select></div>
+        <div><label for="originality">Preserving original parts and appearance</label><small class="dcHelp">“Matching numbers” means original identifying components; “restomod” means classic styling with modern upgrades. It is okay not to know.</small><select id="originality"><option>Not sure / not important</option><option>Mostly original</option><option>Matching-numbers / preserve originality</option><option>Modified / restomod</option><option>I’m comfortable with modifications</option></select></div>
       </div>
       <div class="grid2" style="margin-top:12px">
         <div><label for="mods">Known modifications</label><input id="mods" placeholder="Carb, HEI, headers, cooling upgrades, etc."></div>
@@ -173,7 +173,7 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
 
     <section class="panel">
       <div class="step-head"><div class="step-num">2</div><h3>Describe the symptoms</h3></div>
-      <label for="symptoms">What is the car doing?</label>
+      <div class="dcStarter"><strong>New to car repair? Start with a conversation.</strong><p>Describe what you notice in everyday language. Dr Car will ask follow-up questions.</p><button class="btn btn-blue" id="dcJumpVoice" type="button">🎙️ Talk with Dr Car</button></div><label for="symptoms">What is the car doing?</label>
       <textarea id="symptoms" placeholder="Example: Starts normally cold, but after a 30-minute drive it is difficult to restart when hot. Sometimes the starter seems slower."></textarea>
       <div class="grid3" style="margin-top:12px">
         <div><label>When does it happen? Select all that apply.</label>
@@ -278,8 +278,15 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
       <div class="feature"><div class="ico">📖</div><div><h4>Manual Verification</h4><p>Exact specs, wiring colors, timing values, and part numbers should be checked against a proper service source.</p></div></div>
       <div class="feature"><div class="ico">🏁</div><div><h4>Preserve Originality</h4><p>Matching-numbers and rare cars need special care before irreversible modifications.</p></div></div>
     </div>
+<div class="dcResources"><h3>Trusted starting points</h3><p>Verify instructions against the service information for your exact year, engine and model.</p><ul>
+<li><a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener noreferrer">NHTSA recalls and vehicle safety</a></li>
+<li><a href="https://www.nhtsa.gov/vehicle" target="_blank" rel="noopener noreferrer">NHTSA complaints and manufacturer communications</a></li>
+<li><a href="https://www.helminc.com/" target="_blank" rel="noopener noreferrer">Helm factory service publications (where available)</a></li>
+<li><a href="https://www.hagerty.com/media/maintenance-and-tech/" target="_blank" rel="noopener noreferrer">Hagerty maintenance and technology articles</a></li>
+</ul><p>Video tutorials should be treated as supplementary; verify qualifications and procedures before attempting repairs.</p></div>
   </section>
 
+  <section class="section"><div class="panel"><h2>Why Dr Car instead of a general chatbot?</h2><p>Dr Car follows a guided, safety-first workflow: symptom intake, danger screening, checks matched to skill level, repair-planning ranges, specialist lookup, and a printable mechanic report. It is a rule-based prototype, not a confirmed diagnosis.</p></div></section>
   <section id="about" class="section">
     <div class="panel">
       <h2 style="margin-top:0">About Dr Car</h2>
@@ -562,7 +569,7 @@ function doAnalyze(){
 function updateDiagnosis(){
  const d=getData(),f=val('followup');if(!f)return alert('Tell Dr Car what you checked and what you found.');
  if(d.redflags.length)return hardStop(d);
- const r=analyzeData(d,f);showResults(d,r,f);$('loopNote').textContent='Diagnosis updated using the new check result. Continue the loop only with safe checks that fit your skill level.';
+ const r=analyzeData(d,f);showResults(d,r,f);$('loopNote').textContent='Follow-up result recorded in the mechanic report. Check the updated possibilities and next question above. These are not confirmed diagnoses.';
 }
 function searchMaps(){
  const loc=val('manualZip')||val('zip');const spec=val('manualSearch')||current.specialist||'automotive repair';
@@ -625,7 +632,7 @@ $('copyStop').onclick=async()=>{await navigator.clipboard.writeText($('hardStop'
  <button type="button" class="primary" id="dcStart">▶ Start conversation</button>
  <button type="button" id="dcListen">🎤 Talk</button>
  <button type="button" id="dcStop">■ Stop</button>
- <button type="button" id="dcRead">🔊 Read findings</button>
+ <button type="button" id="dcRead">🔊 Read findings</button><button type="button" id="dcPrint">🖨 Print notes & instructions</button><button type="button" id="dcSave">💾 Save notes (.txt)</button>
 </div>
 <div id="dcLog" role="log" aria-live="polite" aria-label="Conversation transcript"></div>
 <div id="dcInputRow"><input id="dcText" type="text" placeholder="Type a reply if you prefer..." aria-label="Message to Dr Car"><button type="button" id="dcSend">Send</button></div>
@@ -747,5 +754,64 @@ $('copyStop').onclick=async()=>{await navigator.clipboard.writeText($('hardStop'
 })();
 </script>
 
+
+<!-- Classmate feedback and printable conversation notes -->
+<style>
+.dcHelp{display:block;font-size:12px;color:#596875;margin:4px 0 8px}
+.dcStarter{padding:16px;border-radius:12px;background:#eaf4f7;border:1px solid #a6cbd6;margin:0 0 14px}
+.dcStarter p{margin:7px 0 10px}
+.dcResources{padding:18px;background:#fffdf9;border:1px solid #ded5c9;border-radius:12px;margin-top:18px}
+.dcResources li{margin:9px 0}.dcResources a{color:#0e599b;text-decoration:underline}
+</style>
+<script>
+(function(){
+const E=id=>document.getElementById(id);
+E('dcJumpVoice')?.addEventListener('click',()=>{
+ E('drCarVoice')?.classList.remove('minimized');
+ E('dcStart')?.click();
+ E('drCarVoice')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+function notes(){
+ const get=id=>E(id)?.value?.trim()||'Not provided';
+ const transcript=[...(E('dcLog')?.children||[])].map(x=>x.textContent).join('\n\n')||'No conversation recorded in this session.';
+ const hard=E('hardStop')?.classList.contains('on');
+ const result=E('results')?.classList.contains('on');
+ const sections=[
+ ['VEHICLE',[get('year'),get('make'),get('model'),get('engine')].filter(x=>x!=='Not provided').join(' ')||'Not provided'],
+ ['EXPERIENCE / PREFERENCES','Skill: '+get('skill')+'\nTools: '+get('tools')+'\nOriginality: '+get('originality')],
+ ['REPORTED SYMPTOMS',get('symptoms')],
+ ['CONVERSATION TRANSCRIPT',transcript],
+ ['SAFETY SCREENING',hard?E('hardStop').innerText:'No safety hard stop displayed in this session. This does NOT confirm the vehicle is safe.'],
+ ['POSSIBLE CAUSES',result?E('likely')?.innerText:'No assessment generated yet.'],
+ ['CHECKS / INSTRUCTIONS',result?E('checks')?.innerText:'Run Analyze first to generate checks. Do not attempt unverified repairs.'],
+ ['FOLLOW-UP QUESTIONS',result?E('questions')?.innerText:'Not generated yet.'],
+ ['RECOMMENDED SPECIALIST',result?E('specialist')?.innerText:'Not identified yet.'],
+ ['PLANNING ESTIMATES',result?E('estimates')?.innerText:'Not generated yet.'],
+ ['LATEST CHECK RESULT',get('followup')],
+ ['COMPLETE MECHANIC INTAKE REPORT',E('report')?.textContent||'Not generated yet.']
+ ];
+ return sections.map(([h,t])=>h+'\n'+'-'.repeat(h.length)+'\n'+(t||'Not yet provided')).join('\n\n')+
+ '\n\nIMPORTANT: Dr Car provides preliminary decision support, not a confirmed diagnosis. Costs and times are estimates, not quotes. Stop work and get qualified help for safety-critical conditions. Verify all procedures and specifications against manufacturer service information.';
+}
+function printNotes(){
+ const txt='DR CAR — BEGINNER CONVERSATION & REPAIR PLANNING NOTES\nPrepared: '+new Date().toLocaleString()+'\n\n'+notes();
+ const win=window.open('','_blank');
+ if(!win){alert('Allow pop-ups to print your notes, or choose Save notes (.txt).');return;}
+ win.document.title='Dr Car Conversation and Instructions';
+ const style=win.document.createElement('style');
+ style.textContent='body{font:14px/1.5 Arial,sans-serif;color:#15202a;max-width:780px;margin:34px auto;padding:0 20px}pre{white-space:pre-wrap;word-break:break-word;font:inherit}';
+ win.document.head.append(style);
+ const pre=win.document.createElement('pre');pre.textContent=txt;win.document.body.append(pre);
+ win.document.close();win.focus();win.print();
+}
+function saveNotes(){
+ const txt='DR CAR — BEGINNER CONVERSATION & REPAIR PLANNING NOTES\nPrepared: '+new Date().toLocaleString()+'\n\n'+notes();
+ const blob=new Blob([txt],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='Dr-Car-Conversation-and-Instructions.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+E('dcPrint')?.addEventListener('click',printNotes);
+E('dcSave')?.addEventListener('click',saveNotes);
+})();
+</script>
 </body>
 </html>
