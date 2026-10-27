@@ -596,102 +596,154 @@ $('copyStop').onclick=async()=>{await navigator.clipboard.writeText($('hardStop'
 
 <!-- Dr Car voice experience -->
 <style>
-#drCarVoice{position:fixed;right:17px;bottom:17px;z-index:90;background:#09243b;color:#fff;border:1px solid #346080;border-radius:16px;padding:15px;width:min(345px,calc(100vw - 34px));box-shadow:0 12px 38px #0006;font:14px system-ui,sans-serif}
-#drCarVoice h3{margin:0 0 5px;color:white;font-size:17px}
-#drCarVoice p{margin:4px 0 10px;color:#deebf4;font-size:12px}
-#drCarVoice .vactions{display:flex;gap:7px;flex-wrap:wrap}
-#drCarVoice button,#drCarVoice select{border:1px solid #7792a8;border-radius:8px;padding:9px 10px;background:#e7f3ff;color:#08243e;font:inherit;cursor:pointer}
-#drCarVoice select{max-width:100%;width:100%;margin:8px 0;background:white}
+#drCarVoice{position:fixed;right:17px;bottom:17px;z-index:90;background:#09243b;color:#fff;border:1px solid #346080;border-radius:16px;padding:15px;width:min(370px,calc(100vw - 34px));max-height:85vh;overflow:auto;box-shadow:0 12px 38px #0006;font:14px system-ui,sans-serif}
+#drCarVoice h3{margin:0;color:white;font-size:17px}
+#drCarVoice p{margin:8px 0;color:#deebf4;font-size:12px}
+#drCarVoice .vactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+#drCarVoice button,#drCarVoice select,#drCarVoice input{border:1px solid #7792a8;border-radius:8px;padding:9px 10px;background:#e7f3ff;color:#08243e;font:inherit}
+#drCarVoice button{cursor:pointer}
+#drCarVoice select,#drCarVoice input{width:100%;background:white}
 #drCarVoice button.primary{background:#2fb8ea;border-color:#2fb8ea;font-weight:700}
-#drCarVoice .vstatus{font-size:11px;min-height:18px;color:#c9e7f5;margin-top:9px}
+#drCarVoice .vstatus{font-size:12px;min-height:18px;color:#c9e7f5;margin-top:9px}
 #drCarVoice.minimized .voice-details{display:none}
 #drCarVoice .head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 #drCarVoice .head button{background:transparent;color:white;padding:3px 9px}
+#dcLog{max-height:180px;overflow:auto;background:#12334d;border-radius:9px;padding:9px;margin-top:9px;font-size:12px;line-height:1.5}
+#dcLog div{padding:5px 0;border-bottom:1px solid #34516b}
+#dcLog strong{color:#78dafb}
+#dcInputRow{display:flex;gap:6px;margin-top:8px}
+#dcInputRow input{min-width:0;flex:1}
+#dcInputRow button{flex:none}
 </style>
-<aside id="drCarVoice" aria-label="Dr Car voice assistant">
- <div class="head"><h3>🎙️ Talk with Dr Car</h3><button type="button" id="dcCollapse" aria-label="Minimize voice controls">−</button></div>
- <div class="voice-details">
- <p>Your friendly, experienced American mechanic. Hear the welcome message or have Dr Car read his findings.</p>
- <label for="dcVoiceSelect">Voice <span style="font-size:11px;color:#bad2e5">(voices installed in this browser)</span></label>
- <select id="dcVoiceSelect" aria-label="Choose Dr Car voice"></select>
- <div class="vactions">
-  <button type="button" class="primary" id="dcWelcome">▶ Hear Dr Car</button>
-  <button type="button" id="dcRead">🔊 Read findings</button>
-  <button type="button" id="dcStop">■ Stop</button>
-  <button type="button" id="dcDictate">🎤 Describe symptom</button>
- </div>
- <div class="vstatus" id="dcStatus" role="status" aria-live="polite">Tap “Hear Dr Car” to meet your mechanic.</div>
- </div>
+<aside id="drCarVoice" aria-label="Dr Car interactive voice assistant">
+<div class="head"><h3>🎙️ Talk with Dr Car</h3><button type="button" id="dcCollapse" aria-label="Minimize voice controls">−</button></div>
+<div class="voice-details">
+<p>Have a two-way conversation with your mechanic. Tap Start, then answer by microphone or typing.</p>
+<label for="dcVoiceSelect">Voice</label>
+<select id="dcVoiceSelect" aria-label="Choose Dr Car voice"></select>
+<div class="vactions">
+ <button type="button" class="primary" id="dcStart">▶ Start conversation</button>
+ <button type="button" id="dcListen">🎤 Talk</button>
+ <button type="button" id="dcStop">■ Stop</button>
+ <button type="button" id="dcRead">🔊 Read findings</button>
+</div>
+<div id="dcLog" role="log" aria-live="polite" aria-label="Conversation transcript"></div>
+<div id="dcInputRow"><input id="dcText" type="text" placeholder="Type a reply if you prefer..." aria-label="Message to Dr Car"><button type="button" id="dcSend">Send</button></div>
+<div class="vstatus" id="dcStatus" role="status" aria-live="polite">Press Start conversation to meet Dr Car.</div>
+<p>Voice recognition works best in Chrome or Edge with microphone permission. Responses use the app's built-in diagnostic logic, not a live AI model. Do not use while driving.</p>
+</div>
 </aside>
 <script>
 (function(){
  const intro="Well, hey there! I'm Dr. Car. I've been around engines long enough to know they all have a story to tell. Whether you're working on a classic '79 Trans Am, a beautiful old Rolls-Royce, or your everyday driver, I'm here to help. So, tell me, what's going on with your car today?";
- const $v=id=>document.getElementById(id);
- const status=t=>$v('dcStatus').textContent=t;
- const synth=window.speechSynthesis;
- const select=$v('dcVoiceSelect');
- const voiceKey='drCarVoiceChoice';
- let voices=[],rec=null;
- function chooseDefault(){
-  const stored=(()=>{try{return localStorage.getItem(voiceKey)}catch(e){return null}})();
-  let idx=voices.findIndex(v=>v.voiceURI===stored);
-  if(idx<0)idx=voices.findIndex(v=>/en[-_]US/i.test(v.lang)&&/\b(David|Guy|Mark|Christopher|Andrew|Brian|Eric|Roger)\b/i.test(v.name));
-  if(idx<0)idx=voices.findIndex(v=>/^en[-_]US/i.test(v.lang));
-  if(idx<0)idx=0;
-  return idx;
- }
+ const el=id=>document.getElementById(id), status=t=>el('dcStatus').textContent=t;
+ const synth=window.speechSynthesis, Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ const select=el('dcVoiceSelect'), voiceKey='drCarVoiceChoice';
+ let voices=[],rec=null,stage='idle',lastUtterance=null,session=0,recognized=false;
+ function log(who,msg){const div=document.createElement('div');const strong=document.createElement('strong');strong.textContent=who+': ';div.append(strong,document.createTextNode(msg));el('dcLog').append(div);el('dcLog').scrollTop=el('dcLog').scrollHeight;}
  function loadVoices(){
-  if(!synth){select.innerHTML='<option>Voice playback unavailable</option>';return;}
+  if(!synth){select.innerHTML='<option>Speech unavailable</option>';return;}
+  let stored='';try{stored=localStorage.getItem(voiceKey)||''}catch(e){}
   voices=synth.getVoices().filter(v=>/^en/i.test(v.lang));
-  select.innerHTML='';
+  select.replaceChildren();
   if(!voices.length){select.add(new Option('Default English voice',''));return;}
-  const idx=chooseDefault();
   voices.forEach(v=>select.add(new Option(v.name+' ('+v.lang+')',v.voiceURI)));
-  select.selectedIndex=Math.max(0,idx);
+  const preferred=voices.find(v=>v.voiceURI===stored)||voices.find(v=>/^en[-_]US/i.test(v.lang)&&/\b(David|Guy|Mark|Christopher|Andrew|Brian|Eric|Roger)\b/i.test(v.name))||voices.find(v=>/^en[-_]US/i.test(v.lang))||voices[0];
+  select.value=preferred.voiceURI;
  }
- select.addEventListener('change',()=>{try{localStorage.setItem(voiceKey,select.value)}catch(e){}});
- function speak(t){
-  if(!synth){status('Speech playback is not available in this browser.');return;}
+ select.onchange=()=>{try{localStorage.setItem(voiceKey,select.value)}catch(e){}};
+ function stopRecognition(){if(rec){const r=rec;rec=null;try{r.abort()}catch(e){}}}
+ function speak(message,thenListen=false){
+  if(!synth){status('Speech unavailable; see Dr Car response in the conversation.');return;}
   synth.cancel();
-  const u=new SpeechSynthesisUtterance(t);
-  const voice=voices.find(v=>v.voiceURI===select.value);
-  if(voice)u.voice=voice;
-  u.lang=voice?.lang||'en-US';u.rate=.89;u.pitch=.88;u.volume=1;
-  u.onstart=()=>status('Dr Car is speaking…');
-  u.onend=()=>status('Ready when you are.');
-  u.onerror=()=>status('Voice playback failed. Choose another installed voice and try again.');
+  const id=++session,u=new SpeechSynthesisUtterance(message);
+  const v=voices.find(x=>x.voiceURI===select.value);
+  if(v)u.voice=v;
+  u.lang=v?.lang||'en-US';u.rate=.88;u.pitch=.88;
+  lastUtterance=u;
+  u.onstart=()=>status('Dr Car speaking...');
+  u.onend=()=>{if(id!==session)return;status('Your turn. Tap Talk or type a reply.');if(thenListen&&Recognition)listen();};
+  u.onerror=()=>{if(id===session)status('Audio unavailable. Try another voice or use the text conversation.');};
   synth.speak(u);
  }
- $v('dcWelcome').onclick=()=>speak(intro);
- $v('dcStop').onclick=()=>{if(synth)synth.cancel();if(rec)try{rec.stop()}catch(e){}status('Stopped.');};
- $v('dcRead').onclick=()=>{
-   const hard=$v('hardStop');
-   const results=$v('results');
-   let t='';
-   if(hard&&hard.classList.contains('on'))t=(hard.innerText||'').trim();
-   else if(results&&results.classList.contains('on'))t=(($v('report')?.textContent)||'').trim();
-   if(!t){status('Run the vehicle assessment first, then I can read the findings.');return;}
-   speak(t.slice(0,4000));
+ function say(message,listenAfter=false){log('Dr Car',message);speak(message,listenAfter);}
+ function setForm(id,value){const field=el(id);if(field){field.value=value;field.dispatchEvent(new Event('change',{bubbles:true}));}}
+ function reply(raw){
+  const t=raw.trim();if(!t)return;
+  stopRecognition();log('You',t);el('dcText').value='';
+  if(stage==='idle'){stage='vehicle';say('Good to meet you. What year, make, and model are we working on?',false);return;}
+  const low=t.toLowerCase();
+  if(/\b(stop|goodbye|cancel conversation)\b/.test(low)){stage='idle';say('You bet. Come on back whenever you need a hand.');return;}
+  if(stage==='vehicle'){
+   let year=t.match(/\b(19\d\d|20\d\d)\b/);
+   if(year)setForm('year',year[1]);
+   const makes=['Pontiac','Chevrolet','Ford','Dodge','Plymouth','Rolls-Royce','Cadillac','Buick','Oldsmobile','Chrysler','Mercedes-Benz','BMW','Volkswagen','Toyota','Honda','Jeep'];
+   const make=makes.find(m=>low.includes(m.toLowerCase().replace('-',' '))||low.includes(m.toLowerCase()));
+   if(make)setForm('make',make);
+   let model=t.replace(/\b(19\d\d|20\d\d)\b/g,'');
+   if(make)model=model.replace(new RegExp(make.replace('-','[- ]'),'i'),'');
+   model=model.replace(/\b(it is|it's|a|an|my|the|i have|I've got|it's a)\b/gi,'').trim();
+   if(model)setForm('model',model.slice(0,80));
+   stage='symptom';say('All right. Tell me what the car is doing. Any noises, smells, warning lights, leaks, or trouble starting?',false);return;
+  }
+  if(stage==='symptom'||stage==='followup'){
+   const input=el('symptoms');
+   if(stage==='symptom'&&input){input.value=[input.value.trim(),t].filter(Boolean).join(' ');}
+   if(stage==='followup'&&el('followup'))el('followup').value=t;
+   const danger=/\b(smoke|smoking|fire|flames|fuel leak|gas leak|brakes fail|no brakes|pedal to floor|lost steering|overheat|overheating|no oil pressure|zero oil pressure)\b/i.test(t+' '+(input?.value||''));
+   if(danger){stage='paused';say('Hold on, friend. That could be a serious safety issue. Stop driving, switch off the vehicle when safe, and arrange qualified help or towing. Please review the safety checklist in the app before doing any work.');return;}
+   if(stage==='symptom'){
+    stage='confirm';say('Got it. Before I narrow it down, does the problem happen mostly when the engine is cold, when it is hot, or all the time?');return;
+   }
+   try{
+    if(typeof updateDiagnosis==='function'&&el('followup'))updateDiagnosis();
+   }catch(e){}
+   const q=el('questions')?.querySelector('li')?.textContent;
+   say('Thanks, that helps. '+(q||'What have you checked so far, and what did you find?'));
+   return;
+  }
+  if(stage==='confirm'){
+   const when=el('whenChecks');
+   if(when){
+    const options=[...when.querySelectorAll('input')];
+    const target=options.find(x=>low.includes('hot')&&/hot/i.test(x.value))||options.find(x=>low.includes('cold')&&/cold/i.test(x.value));
+    if(target)target.checked=true;
+   }
+   if(el('symptoms'))el('symptoms').value+=' Happens: '+t+'.';
+   stage='followup';
+   try{
+    if(typeof doAnalyze==='function')doAnalyze();
+    const hard=el('hardStop');
+    if(hard?.classList.contains('on')){stage='paused';say('The safety assessment flagged a potential serious issue. Do not drive until it is inspected. Please review the red safety warning on the page.');return;}
+    const likely=el('likely')?.querySelector('li')?.textContent;
+    const q=el('questions')?.querySelector('li')?.textContent;
+    say((likely?'Based on what you have told me, one possible area to check is: '+likely+' ':'I need a bit more information before narrowing this down. ')+(q||'What have you inspected already?')+' These are possibilities, not a confirmed diagnosis.');
+   }catch(e){say('Thanks. I have added your description to the intake form. Use Analyze to see the detailed findings, then tell me what you discover.');}
+   return;
+  }
+  if(stage==='paused')say('Please review the safety warning and get the vehicle checked before we continue troubleshooting.');
+ }
+ function listen(){
+  if(!Recognition){status('Voice recognition is not supported here. Please type below, or try Chrome or Edge.');return;}
+  stopRecognition();if(synth)synth.cancel();++session;
+  const r=new Recognition();rec=r;r.lang='en-US';r.interimResults=false;r.maxAlternatives=1;
+  r.onstart=()=>status('Listening. Go ahead...');
+  r.onresult=e=>{if(rec!==r)return;const heard=e.results?.[0]?.[0]?.transcript||'';rec=null;reply(heard);};
+  r.onerror=e=>{if(rec===r){rec=null;status('Microphone error: '+e.error+'. Allow microphone permission or type your reply.');}};
+  r.onend=()=>{if(rec===r){rec=null;status('Microphone stopped. Tap Talk again or type your reply.');}};
+  try{r.start()}catch(e){rec=null;status('Could not access microphone. Check permissions or type your reply.');}
+ }
+ el('dcStart').onclick=()=>{stopRecognition();if(synth)synth.cancel();++session;el('dcLog').replaceChildren();stage='vehicle';say(intro+' First, what year, make, and model is your vehicle?',false);};
+ el('dcListen').onclick=listen;
+ el('dcSend').onclick=()=>reply(el('dcText').value);
+ el('dcText').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();reply(el('dcText').value);}};
+ el('dcStop').onclick=()=>{stopRecognition();++session;if(synth)synth.cancel();status('Stopped. Click Talk or Start to continue.');};
+ el('dcRead').onclick=()=>{
+  const t=el('hardStop')?.classList.contains('on')?el('hardStop').innerText:el('report')?.textContent?.trim();
+  if(!t){status('First run an assessment in the app.');return;}speak(t.slice(0,2500));
  };
- $v('dcDictate').onclick=()=>{
-  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!Recognition){status('Microphone dictation is not supported by this browser. Try Chrome or Edge.');return;}
-  if(rec)try{rec.stop()}catch(e){}
-  rec=new Recognition();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=1;
-  rec.onstart=()=>status('Listening… describe what your car is doing.');
-  rec.onresult=e=>{
-   const t=e.results[0][0].transcript;
-   const input=$v('symptoms');
-   if(input){input.value=(input.value.trim()?input.value.trim()+' ':'')+t;input.dispatchEvent(new Event('input',{bubbles:true}));status('Added your description to Symptoms. Review it, then tap Analyze.');}
-   else status('Heard: '+t);
-  };
-  rec.onerror=e=>status('Microphone issue: '+e.error+'. Check permission and try again.');
-  rec.onend=()=>{rec=null;};
-  try{rec.start()}catch(e){status('Could not start microphone. Check browser permission.');}
- };
- $v('dcCollapse').onclick=()=>{const p=$v('drCarVoice');p.classList.toggle('minimized');$v('dcCollapse').textContent=p.classList.contains('minimized')?'+':'−';};
- loadVoices();
- if(synth){synth.addEventListener?.('voiceschanged',loadVoices);}
+ el('dcCollapse').onclick=()=>{const p=el('drCarVoice');p.classList.toggle('minimized');el('dcCollapse').textContent=p.classList.contains('minimized')?'+':'−';};
+ loadVoices();if(synth)synth.addEventListener?.('voiceschanged',loadVoices);
 })();
 </script>
 
