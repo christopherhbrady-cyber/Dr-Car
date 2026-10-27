@@ -593,5 +593,107 @@ $('mapSearch').onclick=searchMaps;$('clubSearch').onclick=searchClubs;document.q
 $('copyReport').onclick=async()=>{await navigator.clipboard.writeText($('report').textContent);$('copyReport').textContent='Copied';setTimeout(()=>$('copyReport').textContent='Copy report',1200)};
 $('copyStop').onclick=async()=>{await navigator.clipboard.writeText($('hardStop').dataset.summary||'');$('copyStop').textContent='Copied';setTimeout(()=>$('copyStop').textContent='Copy safety summary',1200)};
 </script>
+
+<!-- Dr Car voice experience -->
+<style>
+#drCarVoice{position:fixed;right:17px;bottom:17px;z-index:90;background:#09243b;color:#fff;border:1px solid #346080;border-radius:16px;padding:15px;width:min(345px,calc(100vw - 34px));box-shadow:0 12px 38px #0006;font:14px system-ui,sans-serif}
+#drCarVoice h3{margin:0 0 5px;color:white;font-size:17px}
+#drCarVoice p{margin:4px 0 10px;color:#deebf4;font-size:12px}
+#drCarVoice .vactions{display:flex;gap:7px;flex-wrap:wrap}
+#drCarVoice button,#drCarVoice select{border:1px solid #7792a8;border-radius:8px;padding:9px 10px;background:#e7f3ff;color:#08243e;font:inherit;cursor:pointer}
+#drCarVoice select{max-width:100%;width:100%;margin:8px 0;background:white}
+#drCarVoice button.primary{background:#2fb8ea;border-color:#2fb8ea;font-weight:700}
+#drCarVoice .vstatus{font-size:11px;min-height:18px;color:#c9e7f5;margin-top:9px}
+#drCarVoice.minimized .voice-details{display:none}
+#drCarVoice .head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#drCarVoice .head button{background:transparent;color:white;padding:3px 9px}
+</style>
+<aside id="drCarVoice" aria-label="Dr Car voice assistant">
+ <div class="head"><h3>🎙️ Talk with Dr Car</h3><button type="button" id="dcCollapse" aria-label="Minimize voice controls">−</button></div>
+ <div class="voice-details">
+ <p>Your friendly, experienced American mechanic. Hear the welcome message or have Dr Car read his findings.</p>
+ <label for="dcVoiceSelect">Voice <span style="font-size:11px;color:#bad2e5">(voices installed in this browser)</span></label>
+ <select id="dcVoiceSelect" aria-label="Choose Dr Car voice"></select>
+ <div class="vactions">
+  <button type="button" class="primary" id="dcWelcome">▶ Hear Dr Car</button>
+  <button type="button" id="dcRead">🔊 Read findings</button>
+  <button type="button" id="dcStop">■ Stop</button>
+  <button type="button" id="dcDictate">🎤 Describe symptom</button>
+ </div>
+ <div class="vstatus" id="dcStatus" role="status" aria-live="polite">Tap “Hear Dr Car” to meet your mechanic.</div>
+ </div>
+</aside>
+<script>
+(function(){
+ const intro="Well, hey there! I'm Dr. Car. I've been around engines long enough to know they all have a story to tell. Whether you're working on a classic '79 Trans Am, a beautiful old Rolls-Royce, or your everyday driver, I'm here to help. So, tell me, what's going on with your car today?";
+ const $v=id=>document.getElementById(id);
+ const status=t=>$v('dcStatus').textContent=t;
+ const synth=window.speechSynthesis;
+ const select=$v('dcVoiceSelect');
+ const voiceKey='drCarVoiceChoice';
+ let voices=[],rec=null;
+ function chooseDefault(){
+  const stored=(()=>{try{return localStorage.getItem(voiceKey)}catch(e){return null}})();
+  let idx=voices.findIndex(v=>v.voiceURI===stored);
+  if(idx<0)idx=voices.findIndex(v=>/en[-_]US/i.test(v.lang)&&/\b(David|Guy|Mark|Christopher|Andrew|Brian|Eric|Roger)\b/i.test(v.name));
+  if(idx<0)idx=voices.findIndex(v=>/^en[-_]US/i.test(v.lang));
+  if(idx<0)idx=0;
+  return idx;
+ }
+ function loadVoices(){
+  if(!synth){select.innerHTML='<option>Voice playback unavailable</option>';return;}
+  voices=synth.getVoices().filter(v=>/^en/i.test(v.lang));
+  select.innerHTML='';
+  if(!voices.length){select.add(new Option('Default English voice',''));return;}
+  const idx=chooseDefault();
+  voices.forEach(v=>select.add(new Option(v.name+' ('+v.lang+')',v.voiceURI)));
+  select.selectedIndex=Math.max(0,idx);
+ }
+ select.addEventListener('change',()=>{try{localStorage.setItem(voiceKey,select.value)}catch(e){}});
+ function speak(t){
+  if(!synth){status('Speech playback is not available in this browser.');return;}
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  const voice=voices.find(v=>v.voiceURI===select.value);
+  if(voice)u.voice=voice;
+  u.lang=voice?.lang||'en-US';u.rate=.89;u.pitch=.88;u.volume=1;
+  u.onstart=()=>status('Dr Car is speaking…');
+  u.onend=()=>status('Ready when you are.');
+  u.onerror=()=>status('Voice playback failed. Choose another installed voice and try again.');
+  synth.speak(u);
+ }
+ $v('dcWelcome').onclick=()=>speak(intro);
+ $v('dcStop').onclick=()=>{if(synth)synth.cancel();if(rec)try{rec.stop()}catch(e){}status('Stopped.');};
+ $v('dcRead').onclick=()=>{
+   const hard=$v('hardStop');
+   const results=$v('results');
+   let t='';
+   if(hard&&hard.classList.contains('on'))t=(hard.innerText||'').trim();
+   else if(results&&results.classList.contains('on'))t=(($v('report')?.textContent)||'').trim();
+   if(!t){status('Run the vehicle assessment first, then I can read the findings.');return;}
+   speak(t.slice(0,4000));
+ };
+ $v('dcDictate').onclick=()=>{
+  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!Recognition){status('Microphone dictation is not supported by this browser. Try Chrome or Edge.');return;}
+  if(rec)try{rec.stop()}catch(e){}
+  rec=new Recognition();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=1;
+  rec.onstart=()=>status('Listening… describe what your car is doing.');
+  rec.onresult=e=>{
+   const t=e.results[0][0].transcript;
+   const input=$v('symptoms');
+   if(input){input.value=(input.value.trim()?input.value.trim()+' ':'')+t;input.dispatchEvent(new Event('input',{bubbles:true}));status('Added your description to Symptoms. Review it, then tap Analyze.');}
+   else status('Heard: '+t);
+  };
+  rec.onerror=e=>status('Microphone issue: '+e.error+'. Check permission and try again.');
+  rec.onend=()=>{rec=null;};
+  try{rec.start()}catch(e){status('Could not start microphone. Check browser permission.');}
+ };
+ $v('dcCollapse').onclick=()=>{const p=$v('drCarVoice');p.classList.toggle('minimized');$v('dcCollapse').textContent=p.classList.contains('minimized')?'+':'−';};
+ loadVoices();
+ if(synth){synth.addEventListener?.('voiceschanged',loadVoices);}
+})();
+</script>
+
 </body>
 </html>
