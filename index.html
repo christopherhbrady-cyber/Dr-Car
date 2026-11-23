@@ -573,13 +573,34 @@ ${r.questions.map((x,i)=>`${i+1}. ${x}`).join('\n')}
 
 Repair cost/time/difficulty shown in the app are rough planning ranges only, not quotes. Exact specifications and repair procedures must be verified against appropriate service information. Dr Car provides decision support, not a confirmed diagnosis.`;
 }
+function detectTextSafety(d){
+ const t=[d.symptoms,d.sensory,d.gauges,d.recent].join(' ').toLowerCase();
+ const rules=[
+  ['fuel leak',/\b(fuel leak|gas leak|leaking gasoline|strong fuel smell|strong gas smell|strong raw.fuel smell)\b/i],
+  ['exhaust smell',/\b(exhaust fumes in (the )?(car|cabin)|exhaust smell in (the )?(car|cabin))\b/i],
+  ['brake',/\b(no brakes|brakes failed|brake failure|brake pedal (goes |went )?to (the )?floor|lost braking)\b/i],
+  ['steering',/\b(loss of steering|lost steering|steering failure|wheel falling off)\b/i],
+  ['overheating',/\b(severe overheating|engine overheating|coolant boiling|coolant spraying)\b/i],
+  ['electrical',/\b(electrical smoke|smoke under (the )?dash|burning wires|electrical fire|sparks from wiring)\b/i],
+  ['oil pressure',/\b(no oil pressure|zero oil pressure|lost oil pressure|very low oil pressure)\b/i],
+  ['high-voltage',/\b(high.voltage warning|ev battery smoking|hybrid battery smoking|damaged high.voltage battery)\b/i]
+ ];
+ const checks=[...document.querySelectorAll('.redflag')];
+ for(const [label,re] of rules){
+  if(re.test(t)){
+   const box=checks.find(x=>x.value.toLowerCase().includes(label));
+   if(box){box.checked=true;if(!d.redflags.includes(box.value))d.redflags.push(box.value);}
+  }
+ }
+ return d;
+}
 function doAnalyze(){
- const d=getData(); if(!d.symptoms && !d.redflags.length)return alert('Please describe the symptoms or select a safety red flag first.');
+ const d=detectTextSafety(getData()); if(!d.symptoms && !d.redflags.length)return alert('Please describe the symptoms or select a safety red flag first.');
  if(d.redflags.length)return hardStop(d);
  const r=analyzeData(d);showResults(d,r);
 }
 function updateDiagnosis(){
- const d=getData(),f=val('followup');if(!f)return alert('Tell Dr Car what you checked and what you found.');
+ const d=detectTextSafety(getData()),f=val('followup');if(!f)return alert('Tell Dr Car what you checked and what you found.');
  if(d.redflags.length)return hardStop(d);
  const r=analyzeData(d,f);showResults(d,r,f);$('loopNote').textContent='Follow-up result recorded in the mechanic report. Check the updated possibilities and next question above. These are not confirmed diagnoses.';
 }
