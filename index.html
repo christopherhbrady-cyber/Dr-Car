@@ -168,7 +168,7 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
         <div><label for="mods">Known modifications</label><input id="mods" placeholder="Carb, HEI, headers, cooling upgrades, etc."></div>
         <div><label for="tools">Tools available</label><input id="tools" placeholder="Basic hand tools, multimeter, timing light, jack stands..."></div>
       </div>
-      <div class="actions"><button class="btn btn-soft" id="saveVehicle">💾 Save vehicle profile</button><button class="btn btn-soft" id="loadVehicle">↩ Load saved profile</button></div>
+      <div class="actions"><button class="btn btn-soft" id="saveVehicle">💾 Save vehicle profile</button><button class="btn btn-soft" id="loadVehicle">↩ Load saved profile</button><button class="btn btn-soft" type="button" id="deleteVehicle">🗑 Delete saved profile</button></div><p class="muted" style="font-size:13px">Saved profiles stay in this browser on this device; they do not sync across devices.</p>
     </section>
 
     <section class="panel">
@@ -287,6 +287,13 @@ footer{background:var(--navy);color:#cbd7e1;margin-top:32px;padding:28px 18px}
   </section>
 
   <section class="section"><div class="panel"><h2>Why Dr Car instead of a general chatbot?</h2><p>Dr Car follows a guided, safety-first workflow: symptom intake, danger screening, checks matched to skill level, repair-planning ranges, specialist lookup, and a printable mechanic report. It is a rule-based prototype, not a confirmed diagnosis.</p></div></section>
+  <section id="privacy" class="section"><div class="panel">
+    <h2>Privacy and how Dr Car works</h2>
+    <p><strong>No paid AI API:</strong> This educational prototype uses built-in diagnostic rules and browser speech features; it does not call a paid AI model. Results are possibilities, not confirmed diagnoses.</p>
+    <p><strong>Local profiles:</strong> Saving a vehicle stores its details in this device's browser storage. Use Delete saved profile to remove that copy. Clearing site data also deletes it. Records do not sync to other devices.</p>
+    <p><strong>Microphone:</strong> Voice recognition may use your browser's speech provider, including online processing. Privacy and retention depend on that provider. You can use typed input instead. Spoken replies use available browser voices.</p>
+    <p><strong>Files and safety:</strong> Printed or downloaded reports are created only when you request them. Avoid entering private details. Do not operate this app while driving, and obtain professional help for critical vehicle safety problems.</p>
+  </div></section>
   <section id="about" class="section">
     <div class="panel">
       <h2 style="margin-top:0">About Dr Car</h2>
@@ -353,6 +360,11 @@ function saveProfile(){
   const data={vehicleType:val('vehicleType'),mileage:val('mileage'),year:val('year'),make:val('make'),model:val('model'),zip:val('zip'),engine:val('engine'),fuel:val('fuel'),ignition:val('ignition'),powertrain:val('powertrain'),transmission:val('transmission'),codes:val('codes'),storage:val('storage'),skill:val('skill'),originality:val('originality'),mods:val('mods'),tools:val('tools')};
   localStorage.setItem('drCarVehicle',JSON.stringify(data));
   alert('Vehicle profile saved on this device.');
+}
+function deleteProfile(){
+ if(!confirm('Delete the saved vehicle profile from this browser?'))return;
+ try{localStorage.removeItem('drCarVehicle');alert('Saved vehicle profile deleted.')}
+ catch(e){alert('Could not delete the profile. Clear this site data in your browser.')}
 }
 function loadProfile(){
   const raw=localStorage.getItem('drCarVehicle'); if(!raw)return alert('No saved vehicle profile found on this device.');
@@ -595,7 +607,7 @@ function updateVehicleTypeUI(){
  $('manualSearch').placeholder=classic?'Classic car carburetor specialist':'Example: make-specific diagnostic shop, hybrid specialist, EV service center';
 }
 $('vehicleType').onchange=updateVehicleTypeUI;updateVehicleTypeUI();
-$('saveVehicle').onclick=saveProfile;$('loadVehicle').onclick=loadProfile;$('analyze').onclick=doAnalyze;$('sample').onclick=loadSample;$('clear').onclick=()=>location.reload();$('updateDiagnosis').onclick=updateDiagnosis;
+$('saveVehicle').onclick=saveProfile;$('loadVehicle').onclick=loadProfile;$('deleteVehicle').onclick=deleteProfile;$('analyze').onclick=doAnalyze;$('sample').onclick=loadSample;$('clear').onclick=()=>location.reload();$('updateDiagnosis').onclick=updateDiagnosis;
 $('mapSearch').onclick=searchMaps;$('clubSearch').onclick=searchClubs;document.querySelectorAll('.shopSearch').forEach(b=>b.onclick=searchMaps);
 $('copyReport').onclick=async()=>{await navigator.clipboard.writeText($('report').textContent);$('copyReport').textContent='Copied';setTimeout(()=>$('copyReport').textContent='Copy report',1200)};
 $('copyStop').onclick=async()=>{await navigator.clipboard.writeText($('hardStop').dataset.summary||'');$('copyStop').textContent='Copied';setTimeout(()=>$('copyStop').textContent='Copy safety summary',1200)};
@@ -637,7 +649,7 @@ $('copyStop').onclick=async()=>{await navigator.clipboard.writeText($('hardStop'
 <div id="dcLog" role="log" aria-live="polite" aria-label="Conversation transcript"></div>
 <div id="dcInputRow"><input id="dcText" type="text" placeholder="Type a reply if you prefer..." aria-label="Message to Dr Car"><button type="button" id="dcSend">Send</button></div>
 <div class="vstatus" id="dcStatus" role="status" aria-live="polite">Press Start conversation to meet Dr Car.</div>
-<p>Voice recognition works best in Chrome or Edge with microphone permission. Responses use the app's built-in diagnostic logic, not a live AI model. Do not use while driving.</p>
+<p>Voice recognition works best in Chrome or Edge with microphone permission. Spoken input may be handled by your browser's speech service. You may type instead. Diagnostic responses use built-in rules, not a live AI model. Do not use while driving. <a href='#privacy' style='text-decoration:underline'>Privacy details</a>.</p>
 </div>
 </aside>
 <script>
