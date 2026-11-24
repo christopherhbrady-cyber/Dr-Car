@@ -73,7 +73,24 @@ function parseTime(t){
 }
 function process(raw){
  const t=raw.trim();if(!t)return;stop();log("You",t);el("dcText").value="";
- if(hazards.some(re=>re.test(t))){state.stage="unsafe";if(el("symptoms"))el("symptoms").value+=(" "+t);autoflag();say(dict().danger);return}
+ if(hazards.some(re=>re.test(t))){
+  state.stage="unsafe";
+  if(el("symptoms"))el("symptoms").value+=(" "+t);
+  const flags=[...document.querySelectorAll(".redflag")];
+  const hazardTerms=[
+   ["fuel leak",/fuel|gasolina|combustible|essence|benzin|kraftstoff|gas smell/i],
+   ["brake",/brake|frenos|freins|bremsen|freios/i],
+   ["steering",/steering|dirección|direction|lenkung|direção/i],
+   ["overheating",/overheat|sobrecalent|surchauff|überhitz|superaquec/i],
+   ["oil pressure",/oil pressure|presión de aceite|pression d'huile|öldruck|pressão do óleo/i],
+   ["electrical",/electrical|sparks|wiring|fiação|électrique|elektrisch/i]
+  ];
+  const found=hazardTerms.find(([label,re])=>re.test(t));
+  const box=flags.find(x=>x.value.toLowerCase().includes(found?found[0]:"electrical"));
+  if(box)box.checked=true;
+  if(typeof doAnalyze==="function"){try{doAnalyze()}catch(e){}}
+  say(dict().danger);return
+ }
  if(state.stage==="unsafe"){say(dict().danger);return}
  if(state.stage==="vehicle"){
   if(!recognizeVehicle(t)){say(dict().missingVehicle);return}
